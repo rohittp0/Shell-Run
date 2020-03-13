@@ -1,5 +1,5 @@
 #!/bin/bash
-current=pwd
+cwd=$(pwd)
 cd "$(dirname "$(readlink -fm "$0")")"
 
 pword="./password.shadow"
@@ -9,10 +9,13 @@ else
     echo "It seems like you don't have sudo password saved."
     echo "Enter it now to save it."
     echo "To modify it later change it in $pword file."
-    while [!sudo -k true]; do
+    read pass
+    echo $pass | sudo -S touch /bin/a
+    while ! [ -f "/bin/a" ]; do
         read pass
-        echo "$pass" | sudo -S -i
+        echo "$pass" | sudo -S touch /bin/a
     done
+    sudo rm /bin/a
     echo "$pass" >"$pword"
 fi
 
@@ -31,7 +34,7 @@ else
         git reset --hard origin/master
     fi
 fi
-cd pwd
+cd "$cwd"
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     echo "Do you want to run this script ?"
     echo "Press enter to run. Any other key to view scource."
