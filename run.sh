@@ -1,4 +1,20 @@
 #!/bin/bash
+current=pwd
+cd "$(dirname "$(readlink -fm "$0")")"
+
+pword="./password.shadow"
+if [ -f "$pword" ]; then
+    cat "$pword" | sudo -S -i
+else
+    echo "It seems like you don't have sudo password saved."
+    echo "Enter it now to save it."
+    echo "To modify it later change it in $pword file."
+    while [!sudo -k true]; do
+        read pass
+        echo "$pass" | sudo -S -i
+    done
+    echo "$pass" >"$pword"
+fi
 
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
@@ -14,6 +30,7 @@ else
         git pull origin master
     fi
 fi
+cd pwd
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     echo "Do you want to run this script ?"
     echo "Press enter to run. Any other key to view scource."
@@ -41,7 +58,7 @@ else
     read -s -n 1 key
     if [[ $key = "y" ]]; then
         echo "Starting installation" >>"$1.log"
-        cat ./password.shadow | sudo -S dpkg -i "$1" >>"$1.log"
+        sudo dpkg -i "$1" >>"$1.log"
         echo "End of installation" >>"$1.log"
     else
         echo "Installation canceled"
