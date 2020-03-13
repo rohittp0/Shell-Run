@@ -27,7 +27,8 @@ else
     echo "Do you want to upgrade (y/n) ?"
     read -s -n 1 key
     if [[$key == 'y' || $key == 'Y']]; then
-        git pull origin master
+        git fetch --all
+        git reset --hard origin/master
     fi
 fi
 cd pwd
