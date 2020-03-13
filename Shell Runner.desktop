@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Runner
+Comment=Run your shell script or install packages.
+GenericName=Installer
+Exec=./run.sh
+Icon=./run.png
+Terminal=true
+StartupNotify=true
+Type=Application
+Keywords=Run;Runner;Shell;Shell Script;Install;.deb;.sh;
+Version=1.0
+MimeType=application/vnd.debian.binary-package;text/x-shellscript;text/x-python;
+Categories=System;Utility;
