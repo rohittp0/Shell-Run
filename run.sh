@@ -11,7 +11,7 @@ else
     echo "Do you want to upgrade (y/n) ?"
     read -s -n 1 key
     if [[$key == 'y' || $key == 'Y']]; then
-        git pull
+        git pull origin master
     fi
 fi
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
