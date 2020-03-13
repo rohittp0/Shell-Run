@@ -29,7 +29,7 @@ else
     echo "A new version of RunneR is avalable"
     echo "Do you want to upgrade (y/n) ?"
     read -s -n 1 key
-    if [[$key == 'y' || $key == 'Y']]; then
+    if [[ $key == 'y' ]]; then
         git fetch --all
         git reset --hard origin/master
     fi
