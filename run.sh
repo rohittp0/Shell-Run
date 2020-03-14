@@ -3,6 +3,7 @@ cwd=$(pwd)
 cd "$(dirname "$(readlink -fm "$0")")"
 
 pword="./password.shadow"
+root="/bin/a"
 if [ -f "$pword" ]; then
     cat "$pword" | sudo -S -i
 else
@@ -10,12 +11,12 @@ else
     echo "Enter it now to save it."
     echo "To modify it later change it in $pword file."
     read pass
-    echo $pass | sudo -S touch /bin/a
+    echo $pass | sudo -S touch "$root"
     while ! [ -f "/bin/a" ]; do
         read pass
-        echo "$pass" | sudo -S touch /bin/a
+        echo "$pass" | sudo -S touch "$root"
     done
-    sudo rm /bin/a
+    sudo rm "$root"
     echo "$pass" >"$pword"
 fi
 
