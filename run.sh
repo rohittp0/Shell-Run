@@ -19,6 +19,8 @@ else
     echo "$pass" >"$pword"
 fi
 
+clear
+
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
@@ -34,7 +36,10 @@ else
         git reset --hard origin/master
     fi
 fi
+
+clear
 cd "$cwd"
+
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     echo "Do you want to run this script ?"
     echo "Press enter to run. Any other key to view scource."
