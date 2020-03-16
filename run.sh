@@ -78,8 +78,9 @@ Choise="${White}(${BGreen} y${White} / ${BRed}n ${White})${White}"
 cwd=$(pwd)
 cd "$(dirname "$(readlink -fm "$0")")"
 
-pword="./password.shadow"
+pword="./.password.shadow"
 root="/bin/a"
+last="$(cat ./LAST_RUN.date)"
 printf "\n\n"
 
 if [ -f "$pword" ]; then
@@ -103,32 +104,34 @@ fi
 clear
 printf "\n\n"
 
-git remote update
-HEADHASH=$(git rev-parse HEAD)
-UPSTREAMHASH=$(git rev-parse master@{upstream})
+if [[ $(date '+%Y-%m-%d') != $last ]]; then
 
-clear
-printf "\n\n"
+    git remote update
+    HEADHASH=$(git rev-parse HEAD)
+    UPSTREAMHASH=$(git rev-parse master@{upstream})
 
-if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
-    printf "${BGreen}A new version of RunneR is avalable\n"
-    printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
-    read -s -n 1 key
-    while [[ $key != "n" && $key != "N" ]]; do
-        if [[ $key == 'y' || $key == "y" ]]; then
-            git pull -v origin master
-            printf "${BPurple}Press enter to continue.${White}\n"
-            read -s -n 1 a
-            break
-        else
-            printf "${BRed}Incorrect Option${White}\n"
-        fi
-    done
+    if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
+        printf "${BGreen}A new version of RunneR is avalable\n"
+        printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
+        read -s -n 1 key
+        while [[ $key != "n" && $key != "N" ]]; do
+            if [[ $key == 'y' || $key == "y" ]]; then   
+                git pull -v origin master
+                printf "${BPurple}Press enter to continue.${White}\n"
+                read -s -n 1 a
+                break
+            else
+                printf "${BRed}Incorrect Option${White}\n"
+                read -s -n 1 key
+            fi
+        done
+    fi
+    echo "$(date '+%Y-%m-%d')" >"./LAST_RUN.date"
+    clear
+    printf "\n\n"
 fi
 
 cd "$cwd"
-clear
-printf "\n\n"
 
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     printf "${BYellow}Do you want to run this script ?\n"
@@ -166,6 +169,7 @@ else
             break
         else
             printf "${BRed}Incorrect Option${White}\n"
+            read -s -n 1 key
         fi
     done
 fi
