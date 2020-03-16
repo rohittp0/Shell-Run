@@ -26,7 +26,7 @@ fi
 
 clear
 
-git fetch
+git remote update
 HEADHASH=$(git rev-parse HEAD)
 UPSTREAMHASH=$(git rev-parse master@{upstream})
 
@@ -36,7 +36,7 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     read -s -n 1 key
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
-            git pull origin master
+            git pull -v origin master
             $key='n'
         else
             echo -e "${BRed}Incorrect Option${White}"
