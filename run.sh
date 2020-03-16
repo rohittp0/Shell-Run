@@ -29,6 +29,7 @@ clear
 git remote update >>log
 HEADHASH=$(git rev-parse HEAD)
 UPSTREAMHASH=$(git rev-parse master@{upstream})
+clear
 
 if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     echo -e "${BGreen}A new version of RunneR is avalable"
@@ -37,7 +38,7 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
             git pull -v origin master
-            $key='n'
+            break
         else
             echo -e "${BRed}Incorrect Option${White}"
         fi
@@ -72,15 +73,15 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
 else
     echo -e "${BYellow}Are you sure you want to install this package ? ${Choise}"
     read -s -n 1 key
-    while [[ $key != "--exit" ]]; do
+    while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
             echo -e "Starting installation" >>"$1.log"
             sudo dpkg -i "$1" >>"$1.log"
             echo -e "End of installation" >>"$1.log"
-            $key='--exit'
+            break
         elif [[ $key == "n" || key == "N" ]]; then
             echo -e "${BRed}Installation Canceled"
-            $key='--exit'
+            break
         else
             echo -e "${BRed}Incorrect Option${White}"
         fi
