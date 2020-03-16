@@ -38,6 +38,8 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
             git pull -v origin master
+            echo -e "${BPurple}Press enter to continue.${White}"
+            read -s -n 1 a
             break
         else
             echo -e "${BRed}Incorrect Option${White}"
@@ -45,11 +47,8 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     done
 fi
 
-echo -e "${BPurple}Press enter to continue.${White}"
-read -s -n 1 a
-clear
-
 cd "$cwd"
+clear
 
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     echo -e "${BYellow}Do you want to run this script ?"
