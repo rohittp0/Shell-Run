@@ -79,6 +79,7 @@ else
             echo -e "End of installation" >>"$1.log"
         elif [[ $key == "n" || key == "N" ]]; then
             echo -e "${BRed}Installation Canceled"
+            $key='--exit'
         else
             echo -e "${BRed}Incorrect Option${White}"
         fi
