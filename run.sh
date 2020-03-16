@@ -34,7 +34,8 @@ else
     read -s -n 1 key
     if [[ $key == 'y' ]]; then
         git fetch --all
-        git reset --hard origin/master
+        git reset --hard FETCH_HEAD
+        git clean -df
     fi
 fi
 
