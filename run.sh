@@ -1,12 +1,12 @@
 #!/bin/bash
-source ./colors.sh
+./colors.sh
 
 cwd=$(pwd)
 cd "$(dirname "$(readlink -fm "$0")")"
 
 pword="./password.shadow"
 root="/bin/a"
-printf "\n\n\n\n"
+printf "\n\n"
 
 if [ -f "$pword" ]; then
     cat "$pword" | sudo -S -i
@@ -27,14 +27,14 @@ else
 fi
 
 clear
-printf "\n\n\n\n"
+printf "\n\n"
 
 git remote update
 HEADHASH=$(git rev-parse HEAD)
 UPSTREAMHASH=$(git rev-parse master@{upstream})
 
 clear
-printf "\n\n\n\n"
+printf "\n\n"
 
 if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     printf "${BGreen}A new version of RunneR is avalable\n"
@@ -54,7 +54,7 @@ fi
 
 cd "$cwd"
 clear
-printf "\n\n\n\n"
+printf "\n\n"
 
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     printf "${BYellow}Do you want to run this script ?\n"
