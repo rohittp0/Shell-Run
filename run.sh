@@ -33,8 +33,8 @@ if [[ $LOCAL != $REMOTE ]]; then
     echo -e "${BGreen}A new version of RunneR is avalable"
     echo -e "${BYellow}Do you want to upgrade ? ${Choise}"
     read -s -n 1 key
-    while [[key != "n" && key != "N"]]; do
-        if [[ $key == 'y' || key == "y" ]]; then
+    while [[ $key != "n" && $key != "N" ]]; do
+        if [[ $key == 'y' || $key == "y" ]]; then
             git fetch --all
             git reset --hard FETCH_HEAD
             git clean -df
@@ -72,12 +72,12 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
 else
     echo -e "${BYellow}Are you sure you want to install this package ? ${Choise}"
     read -s -n 1 key
-    while [[key != "--exit"]]; do
-        if [[ $key == "y" ]]; then
+    while [[ $key != "--exit" ]]; do
+        if [[ $key == "y" || $Key == "Y" ]]; then
             echo -e "Starting installation" >>"$1.log"
             sudo dpkg -i "$1" >>"$1.log"
             echo -e "End of installation" >>"$1.log"
-        elif [[key == "n" || key == "N"]]; then
+        elif [[ $key == "n" || key == "N" ]]; then
             echo -e "${BRed}Installation Canceled"
         else
             echo -e "${BRed}Incorrect Option${White}"
