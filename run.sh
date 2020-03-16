@@ -22,11 +22,10 @@ fi
 
 clear
 
-UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse "$UPSTREAM")
+REMOTE=$(git rev-parse @{u})
 
-if [ $LOCAL = $REMOTE ]; then
+if [ $LOCAL == $REMOTE ]; then
     echo "RunneR is Up-to Date"
 else
     echo "A new version of RunneR is avalable"
