@@ -72,4 +72,4 @@ On_ICyan='\033[0;106m'   # Cyan
 On_IWhite='\033[0;107m'  # White
 
 #Templates
-Choise="${White}(${UGreen}y${White}/${URed}n${White})${White}"
+Choise="${White}(${BGreen} y${White} / ${BRed}n ${White})${White}"

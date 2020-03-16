@@ -37,6 +37,7 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
             git pull origin master
+            $key='n'
         else
             echo -e "${BRed}Incorrect Option${White}"
         fi
