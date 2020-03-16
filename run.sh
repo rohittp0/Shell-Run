@@ -26,7 +26,7 @@ fi
 
 clear
 
-git remote update
+git remote update >>log
 HEADHASH=$(git rev-parse HEAD)
 UPSTREAMHASH=$(git rev-parse master@{upstream})
 
