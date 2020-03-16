@@ -26,10 +26,11 @@ fi
 
 clear
 
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse @{u})
+git fetch
+HEADHASH=$(git rev-parse HEAD)
+UPSTREAMHASH=$(git rev-parse master@{upstream})
 
-if [[ $LOCAL != $REMOTE ]]; then
+if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     echo -e "${BGreen}A new version of RunneR is avalable"
     echo -e "${BYellow}Do you want to upgrade ? ${Choise}"
     read -s -n 1 key
