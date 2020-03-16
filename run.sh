@@ -77,6 +77,7 @@ else
             echo -e "Starting installation" >>"$1.log"
             sudo dpkg -i "$1" >>"$1.log"
             echo -e "End of installation" >>"$1.log"
+            $key='--exit'
         elif [[ $key == "n" || key == "N" ]]; then
             echo -e "${BRed}Installation Canceled"
             $key='--exit'
