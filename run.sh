@@ -36,9 +36,7 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     read -s -n 1 key
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
-            git fetch --all
-            git reset --hard FETCH_HEAD
-            git clean -df
+            git pull origin master
         else
             echo -e "${BRed}Incorrect Option${White}"
         fi
