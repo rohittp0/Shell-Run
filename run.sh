@@ -45,7 +45,10 @@ if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
     done
 fi
 
+echo -e "${BPurple}Press enter to continue.${White}"
+read -s -n 1 a
 clear
+
 cd "$cwd"
 
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
@@ -87,5 +90,6 @@ else
         fi
     done
 fi
-echo -e "${White}"
+
+echo -e "${BPurple}Press enter to continue.${White}"
 read -s -n 1 key
