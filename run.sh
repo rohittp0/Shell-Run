@@ -6,53 +6,59 @@ cd "$(dirname "$(readlink -fm "$0")")"
 
 pword="./password.shadow"
 root="/bin/a"
+printf "\n\n\n\n"
+
 if [ -f "$pword" ]; then
     cat "$pword" | sudo -S -i
 else
-    echo -e "${BRed}It seems like you don't have sudo password saved."
-    echo -e "${BPurple}Enter it now to save it !"
-    echo -e "${BCyan}To modify it later change it in ${UCyan}$pword${BCyan} file.${White}"
+    printf "${BRed}It seems like you don't have sudo password saved.\n"
+    printf "${BPurple}Enter it now to save it !\n"
+    printf "${BCyan}To modify it later change it in ${UCyan}$pword${BCyan} file.${White}\n"
     read pass
-    echo -e $pass | sudo -S touch "$root"
+    printf $pass | sudo -S touch "$root"
     while ! [ -f "/bin/a" ]; do
         read pass
         echo "$pass" | sudo -S touch "$root"
-        echo -e "${BRed}Oops Wrong Password"
-        echo -e "${BPurple}Please try again${White}"
+        printf "${BRed}Oops Wrong Password\n"
+        printf "${BPurple}Please try again${White}\n"
     done
     sudo rm "$root"
-    echo -e "$pass" >"$pword"
+    printf "$pass" >"$pword"
 fi
 
 clear
+printf "\n\n\n\n"
 
 git remote update
 HEADHASH=$(git rev-parse HEAD)
 UPSTREAMHASH=$(git rev-parse master@{upstream})
+
 clear
+printf "\n\n\n\n"
 
 if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
-    echo -e "${BGreen}A new version of RunneR is avalable"
-    echo -e "${BYellow}Do you want to upgrade ? ${Choise}"
+    printf "${BGreen}A new version of RunneR is avalable\n"
+    printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
     read -s -n 1 key
     while [[ $key != "n" && $key != "N" ]]; do
         if [[ $key == 'y' || $key == "y" ]]; then
             git pull -v origin master
-            echo -e "${BPurple}Press enter to continue.${White}"
+            printf "${BPurple}Press enter to continue.${White}\n"
             read -s -n 1 a
             break
         else
-            echo -e "${BRed}Incorrect Option${White}"
+            printf "${BRed}Incorrect Option${White}\n"
         fi
     done
 fi
 
 cd "$cwd"
 clear
+printf "\n\n\n\n"
 
 if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
-    echo -e "${BYellow}Do you want to run this script ?"
-    echo -e "${BPurple}Press enter to run. Any other key to view scource.${White}"
+    printf "${BYellow}Do you want to run this script ?\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
     read -s -n 1 key
     if [[ $key == "" ]]; then
         echo "Starting excecution" >>"$1.log"
@@ -62,33 +68,33 @@ if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
         gedit "$1"
     fi
 elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
-    echo -e "${BYellow}Do you want to run this python script ?"
-    echo -e "${BPurple}Press enter to run. Any other key to view scource.${White}"
+    printf "${BYellow}Do you want to run this python script ?\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
     read -s -n 1 key
     if [[ $key == "" ]]; then
-        echo -e "Running script" >>"$1.log"
+        echo "Running script" >>"$1.log"
         python "$1" >>"$1.log"
-        echo -e "End of excecution" >>"$1.log"
+        echo "End of excecution" >>"$1.log"
     else
         gedit "$1"
     fi
 else
-    echo -e "${BYellow}Are you sure you want to install this package ? ${Choise}"
+    printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
     read -s -n 1 key
     while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
-            echo -e "Starting installation" >>"$1.log"
+            echo "Starting installation" >>"$1.log"
             sudo dpkg -i "$1" >>"$1.log"
-            echo -e "End of installation" >>"$1.log"
+            echo "End of installation" >>"$1.log"
             break
         elif [[ $key == "n" || key == "N" ]]; then
-            echo -e "${BRed}Installation Canceled"
+            printf "${BRed}Installation Canceled\n"
             break
         else
-            echo -e "${BRed}Incorrect Option${White}"
+            printf "${BRed}Incorrect Option${White}\n"
         fi
     done
 fi
 
-echo -e "${BPurple}Press enter to continue.${White}"
+printf "${BPurple}Press enter to continue.${White}\n"
 read -s -n 1 key
