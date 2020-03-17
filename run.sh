@@ -115,7 +115,7 @@ if [[ $(date '+%Y-%m-%d') != $last ]]; then
         printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
         read -s -n 1 key
         while [[ $key != "n" && $key != "N" ]]; do
-            if [[ $key == 'y' || $key == "y" ]]; then   
+            if [[ $key == "y" || $key == "y" ]]; then
                 git pull -v origin master
                 printf "${BPurple}Press enter to continue.${White}\n"
                 read -s -n 1 a
@@ -138,9 +138,9 @@ if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
     read -s -n 1 key
     if [[ $key == "" ]]; then
-        echo "Starting excecution" >>"$1.log"
-        sh "$1" >>"$1.log"
-        echo "End of excecution" >>"$1.log"
+        printf "${BCyan}Starting excecution${White}\n"
+        sh "$1"
+        printf "${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -149,9 +149,9 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
     printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
     read -s -n 1 key
     if [[ $key == "" ]]; then
-        echo "Running script" >>"$1.log"
-        python "$1" >>"$1.log"
-        echo "End of excecution" >>"$1.log"
+        printf "${BCyan}Running script${White}\n"
+        python "$1"
+        printf "${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -160,9 +160,9 @@ else
     read -s -n 1 key
     while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
-            echo "Starting installation" >>"$1.log"
-            sudo dpkg -i "$1" >>"$1.log"
-            echo "End of installation" >>"$1.log"
+            printf "${BCyan}Starting installation${White}\n"
+            sudo dpkg -i "$1"
+            printf "${BCyan}End of installation${White}\n"
             break
         elif [[ $key == "n" || key == "N" ]]; then
             printf "${BRed}Installation Canceled\n"
