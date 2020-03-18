@@ -117,6 +117,7 @@ if [[ $(date '+%Y-%m-%d') != $last ]]; then
         read -s -n 1 key
         while [[ $key != "n" && $key != "N" ]]; do
             if [[ $key == "y" || $key == "y" ]]; then
+                printf "${BPurple}Updating...${White}\n"
                 git pull -v origin master
                 printf "${BPurple}Press enter to continue.${White}\n"
                 read -s -n 1 a
