@@ -167,7 +167,7 @@ elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
         printf "\n${BCyan}End of excecution${White}\n"
     else
         clear
-        zip -sf *.jar "$1" | more
+        zip -sf "$1" | more
     fi
 elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
     printf "${BYellow}Do you want to run this c++ file ?\n"
