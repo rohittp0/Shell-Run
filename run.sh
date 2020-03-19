@@ -181,19 +181,6 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
     else
         gedit "$1"
     fi
-elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
-    printf "${BYellow}Do you want to run this c++ file ?\n"
-    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Running script${White}\n"
-        g++ "$1" -o "/tmp/$1"
-        "/tmp/$1"
-        printf "${BCyan}End of excecution${White}\n"
-    else
-        gedit "$1"
-    fi
 elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
     printf "${BYellow}Do you want to run this c file ?\n"
     printf "${BCyan}NOTE: The file will be automatically compiled.\n"
@@ -207,7 +194,24 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
     else
         gedit "$1"
     fi
-else
+elif [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
+    printf "${BYellow}Do you want to run this application ? ${Choise}\n"
+    read -s -n 1 key
+    while [[ true ]]; do
+        if [[ $key == "y" || $Key == "Y" ]]; then
+            printf "${BCyan}Starting application${White}\n"
+            "$1"
+            printf "${BCyan}End of excecution{White}\n"
+            break
+        elif [[ $key == "n" || key == "N" ]]; then
+            printf "${BRed}Excecution Canceled\n"
+            break
+        else
+            printf "${BRed}Incorrect Option${White}\n"
+            read -s -n 1 key
+        fi
+    done
+elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]]; then
     printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
     read -s -n 1 key
     while [[ true ]]; do
@@ -224,6 +228,11 @@ else
             read -s -n 1 key
         fi
     done
+else
+    printf "${BRed}Sorry Unsupported file type.\n"
+    printf "${BPurple}If you want to add support for this file type please file an issue on github.\n"
+    printf "${BCyan}visit https://github.com/rohittp0/Shell-Run \n"
+    printf "File type "$(file --mime-type -b "$1")"\n"
 fi
 
 printf "${BPurple}Press enter to continue.${White}\n"
