@@ -157,6 +157,56 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
     else
         gedit "$1"
     fi
+elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
+    printf "${BYellow}Do you want to run this jar file ?\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
+    read -s -n 1 key
+    if [[ $key == "" ]]; then
+        printf "${BCyan}Running script${White}\n"
+        python "$1"
+        printf "${BCyan}End of excecution${White}\n"
+    else
+        thunar "$1"
+    fi
+elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
+    printf "${BYellow}Do you want to run this c++ file ?\n"
+    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
+    read -s -n 1 key
+    if [[ $key == "" ]]; then
+        printf "${BCyan}Running script${White}\n"
+        g++ "$1" -o "/tmp/$1"
+        "/tmp/$1"
+        printf "${BCyan}End of excecution${White}\n"
+    else
+        gedit "$1"
+    fi
+elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
+    printf "${BYellow}Do you want to run this c++ file ?\n"
+    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
+    read -s -n 1 key
+    if [[ $key == "" ]]; then
+        printf "${BCyan}Running script${White}\n"
+        g++ "$1" -o "/tmp/$1"
+        "/tmp/$1"
+        printf "${BCyan}End of excecution${White}\n"
+    else
+        gedit "$1"
+    fi
+elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
+    printf "${BYellow}Do you want to run this c file ?\n"
+    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
+    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
+    read -s -n 1 key
+    if [[ $key == "" ]]; then
+        printf "${BCyan}Running script${White}\n"
+        gcc "$1" -o "/tmp/$1"
+        "/tmp/$1"
+        printf "${BCyan}End of excecution${White}\n"
+    else
+        gedit "$1"
+    fi
 else
     printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
     read -s -n 1 key
