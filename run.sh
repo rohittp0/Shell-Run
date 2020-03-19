@@ -163,7 +163,7 @@ elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
     read -s -n 1 key
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
-        python "$1"
+        java -jar "$1"
         printf "\n${BCyan}End of excecution${White}\n"
     else
         thunar "$1"
