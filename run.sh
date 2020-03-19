@@ -175,8 +175,8 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
     read -s -n 1 key
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
-        g++ "$1" -o "/tmp/$1"
-        "/tmp/$1"
+        g++ "$1" -o "/tmp/$(basename "$1")"
+        "/tmp/$(basename "$1")"
         printf "${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
@@ -188,8 +188,8 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
     read -s -n 1 key
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
-        gcc "$1" -o "/tmp/$1"
-        "/tmp/$1"
+        gcc "$1" -o "/tmp/$(basename "$1")"
+        "/tmp/$(basename "$1")"
         printf "${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
