@@ -142,7 +142,7 @@ if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     if [[ $key == "" ]]; then
         printf "${BCyan}Starting excecution${White}\n"
         sh "$1"
-        printf "${BCyan}End of excecution${White}\n"
+        printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -153,7 +153,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
         python "$1"
-        printf "${BCyan}End of excecution${White}\n"
+        printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -164,7 +164,7 @@ elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
         python "$1"
-        printf "${BCyan}End of excecution${White}\n"
+        printf "\n${BCyan}End of excecution${White}\n"
     else
         thunar "$1"
     fi
@@ -177,7 +177,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
         printf "${BCyan}Running script${White}\n"
         g++ "$1" -o "/tmp/$(basename "$1")"
         "/tmp/$(basename "$1")"
-        printf "${BCyan}End of excecution${White}\n"
+        printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -190,7 +190,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
         printf "${BCyan}Running script${White}\n"
         gcc "$1" -o "/tmp/$(basename "$1")"
         "/tmp/$(basename "$1")"
-        printf "${BCyan}End of excecution${White}\n"
+        printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
     fi
@@ -201,7 +201,7 @@ elif [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
         if [[ $key == "y" || $Key == "Y" ]]; then
             printf "${BCyan}Starting application${White}\n"
             "$1"
-            printf "${BCyan}End of excecution{White}\n"
+            printf "\n${BCyan}End of excecution${White}\n"
             break
         elif [[ $key == "n" || key == "N" ]]; then
             printf "${BRed}Excecution Canceled\n"
@@ -232,7 +232,7 @@ else
     printf "${BRed}Sorry Unsupported file type.\n"
     printf "${BPurple}If you want to add support for this file type please file an issue on github.\n"
     printf "${BCyan}visit https://github.com/rohittp0/Shell-Run \n"
-    printf "File type "$(file --mime-type -b "$1")"\n"
+    printf "File type "$(file --mime-type -b "$1")"\n\n"
 fi
 
 printf "${BPurple}Press enter to continue.${White}\n"
