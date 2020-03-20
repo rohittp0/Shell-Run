@@ -100,6 +100,7 @@ function getChoise() {
 function getTextEditor() {
     declare -a editors=("VSCode" "Gedit" "Nano" "Vim")
     declare -a options=("c" "g" "n" "v")
+    declare -a command=("code" "gedit" "nano" "vi")
     printf "${BPurple}Choose which text editor you want to use ?\n"
     printf "Your options are : \n${BCyan}"
     for ((i = 0; i < ${#array[@]}; i++)); do
@@ -110,7 +111,8 @@ function getTextEditor() {
     while [[ true ]]; do
         for ((i = 0; i < ${#array[@]}; i++)); do
             if [[ key == ${options[$i]} ]]; then
-                "${editors[$i]}" "$1"
+                printf "Opening file in ${editors[$i]}"
+                "${command[$i]}" "$1"
             else
                 printf "${BRed}Incorrect Option${White}\n"
                 read -s -n 1 key
