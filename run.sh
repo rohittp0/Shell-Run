@@ -83,6 +83,42 @@ root="/bin/a"
 last="$(cat ./LAST_RUN.date)"
 printf "\n\n"
 
+function getChoise() {
+    read -s -n 1 key
+    while [[ true ]]; do
+        if [[ $key == "y" || $Key == "Y" ]]; then
+            return true
+        elif [[ $key == "n" || key == "N" ]]; then
+            return false
+        else
+            printf "${BRed}Incorrect Option${White}\n"
+            read -s -n 1 key
+        fi
+    done
+}
+
+function getTextEditor() {
+    declare -a editors=("VSCode" "Gedit" "Nano" "Vim")
+    declare -a options=("c" "g" "n" "v")
+    printf "${BPurple}Choose which text editor you want to use ?\n"
+    printf "Your options are : \n${BCyan}"
+    for ((i = 0; i < ${#array[@]}; i++)); do
+        printf "${editors[$i]}(${options[$i]}) "
+    done
+    printf "${White}\n"
+    read -s -n 1 key
+    while [[ true ]]; do
+        for ((i = 0; i < ${#array[@]}; i++)); do
+            if [[ key == ${options[$i]} ]]; then
+                "${editors[$i]}" "$1"
+            else
+                printf "${BRed}Incorrect Option${White}\n"
+                read -s -n 1 key
+            fi
+        done
+    done
+}
+
 if [ -f "$pword" ]; then
     cat "$pword" | sudo -S -i
 else
@@ -110,23 +146,19 @@ if [[ $(date '+%Y-%m-%d') != $last ]]; then
     git remote update
     HEADHASH=$(git rev-parse HEAD)
     UPSTREAMHASH=$(git rev-parse master@{upstream})
+    clear
 
     if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
         printf "${BGreen}A new version of RunneR is avalable\n"
         printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
-        read -s -n 1 key
-        while [[ $key != "n" && $key != "N" ]]; do
-            if [[ $key == "y" || $key == "y" ]]; then
-                printf "${BPurple}Updating...${White}\n"
-                git pull -v origin master
-                printf "${BPurple}Press enter to continue.${White}\n"
-                read -s -n 1 a
-                break
-            else
-                printf "${BRed}Incorrect Option${White}\n"
-                read -s -n 1 key
-            fi
-        done
+        choise=getChoise
+        if [ $choise ]; then
+            printf "${BPurple}Updating...${White}\n"
+            git pull -v origin master
+            printf "${BPurple}Press enter to continue.${White}\n"
+            read -s -n 1 a
+        fi
+
     fi
     echo "$(date '+%Y-%m-%d')" >"./LAST_RUN.date"
     clear
@@ -144,7 +176,7 @@ if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
         chmod +x $1 && sh "$1"
         printf "\n${BCyan}End of excecution${White}\n"
     else
-        gedit "$1"
+        getTextEditor "$1"
     fi
 elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
     printf "${BYellow}Do you want to run this python script ?\n"
@@ -155,7 +187,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
         python "$1"
         printf "\n${BCyan}End of excecution${White}\n"
     else
-        gedit "$1"
+        getTextEditor "$1"
     fi
 elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
     printf "${BYellow}Do you want to run this jar file ?\n"
@@ -180,7 +212,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
         chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
         printf "\n${BCyan}End of excecution${White}\n"
     else
-        gedit "$1"
+        getTextEditor "$1"
     fi
 elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
     printf "${BYellow}Do you want to run this c file ?\n"
@@ -193,42 +225,28 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
         chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
         printf "\n${BCyan}End of excecution${White}\n"
     else
-        gedit "$1"
+        getTextEditor "$1"
     fi
 elif [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
-    read -s -n 1 key
-    while [[ true ]]; do
-        if [[ $key == "y" || $Key == "Y" ]]; then
-            printf "${BCyan}Starting application${White}\n"
-            chmod +x "$1" && "$1"
-            printf "\n${BCyan}End of excecution${White}\n"
-            break
-        elif [[ $key == "n" || key == "N" ]]; then
-            printf "${BRed}Excecution Canceled\n"
-            break
-        else
-            printf "${BRed}Incorrect Option${White}\n"
-            read -s -n 1 key
-        fi
-    done
+    choise=getChoise
+    if [[ choise ]]; then
+        printf "${BCyan}Starting application${White}\n"
+        chmod +x "$1" && "$1"
+        printf "\n${BCyan}End of excecution${White}\n"
+    else
+        printf "${BRed}Excecution Canceled\n"
+    fi
 elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]]; then
     printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
-    read -s -n 1 key
-    while [[ true ]]; do
-        if [[ $key == "y" || $Key == "Y" ]]; then
-            printf "${BCyan}Starting installation${White}\n"
-            sudo dpkg -i "$1"
-            printf "${BCyan}End of installation${White}\n"
-            break
-        elif [[ $key == "n" || key == "N" ]]; then
-            printf "${BRed}Installation Canceled\n"
-            break
-        else
-            printf "${BRed}Incorrect Option${White}\n"
-            read -s -n 1 key
-        fi
-    done
+    choise=getChoise
+    if [[ choise ]]; then
+        printf "${BCyan}Starting installation${White}\n"
+        sudo dpkg -i "$1"
+        printf "${BCyan}End of installation${White}\n"
+    else
+        printf "${BRed}Installation Canceled\n"
+    fi
 else
     printf "${BRed}Sorry Unsupported file type.\n"
     printf "${BPurple}If you want to add support for this file type please file an issue on github.\n"
