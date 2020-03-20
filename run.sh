@@ -102,11 +102,11 @@ function getTextEditor() {
     declare -a options=("c" "g" "n" "v" "C" "G" "N" "V")
     declare -a command=("code" "gedit" "nano" "vi")
     printf "${BPurple}Choose which text editor you want to use ?\n"
-    printf "Your options are : \n${BCyan}"
+    printf "Your options are : \n\n${BCyan}"
     for ((i = 0; i < ${#editors[@]}; i++)); do
         printf "${editors[$i]} "
     done
-    printf "${BPurple}\nEnter # to exit${White}\n"
+    printf "${BPurple}\n\nEnter # to exit${White}\n\t"
     read -s -n 1 key
     while [[ $key != '#' ]]; do
         for ((i = 0; i < ${#options[@]}; i++)); do
