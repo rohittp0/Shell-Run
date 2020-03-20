@@ -121,6 +121,29 @@ function getTextEditor() {
     done
 }
 
+function tryRunning() {
+    c_cpp=$(""$1" -o "/tmp/$(basename "$1")" && chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"")
+    declare -a files=("text/x-shellscript" "text/x-c" "application/java-archive" "text/x-python" "text/x-c++")
+    declare -a commands=("chmod +x $1 && sh $1" "gcc $c_cpp" "java -jar $1" "python $1" "g++ $c_cpp")
+
+    for ((i = 0; i < ${#files[@]}; i++)); do
+        if [[ $(file --mime-type -b "$1") == ${files[$i]} ]]; then
+            printf "${BYellow}Do you want to run this file ?\n"
+            printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
+            read -s -n 1 key
+            if [[ $key == "" ]]; then
+                printf "${BCyan}Starting excecution${White}\n"
+                ${commands[$i]}
+                printf "\n${BCyan}End of excecution${White}\n"
+                return true
+            else
+                getTextEditor "$1"
+            fi
+        fi
+    done
+    return false
+}
+
 if [ -f "$pword" ]; then
     cat "$pword" | sudo -S -i
 else
@@ -169,67 +192,7 @@ fi
 
 cd "$cwd"
 
-if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
-    printf "${BYellow}Do you want to run this script ?\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Starting excecution${White}\n"
-        chmod +x $1 && sh "$1"
-        printf "\n${BCyan}End of excecution${White}\n"
-    else
-        getTextEditor "$1"
-    fi
-elif [[ $(file --mime-type -b "$1") == "text/x-python" ]]; then
-    printf "${BYellow}Do you want to run this python script ?\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Running script${White}\n"
-        python "$1"
-        printf "\n${BCyan}End of excecution${White}\n"
-    else
-        getTextEditor "$1"
-    fi
-elif [[ $(file --mime-type -b "$1") == "application/java-archive" ]]; then
-    printf "${BYellow}Do you want to run this jar file ?\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Running script${White}\n"
-        java -jar "$1"
-        printf "\n${BCyan}End of excecution${White}\n"
-    else
-        clear
-        zip -sf "$1" | more
-    fi
-elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
-    printf "${BYellow}Do you want to run this c++ file ?\n"
-    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Running script${White}\n"
-        g++ "$1" -o "/tmp/$(basename "$1")"
-        chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
-        printf "\n${BCyan}End of excecution${White}\n"
-    else
-        getTextEditor "$1"
-    fi
-elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
-    printf "${BYellow}Do you want to run this c file ?\n"
-    printf "${BCyan}NOTE: The file will be automatically compiled.\n"
-    printf "${BPurple}Press enter to run. Any other key to view scource.${White}\n"
-    read -s -n 1 key
-    if [[ $key == "" ]]; then
-        printf "${BCyan}Running script${White}\n"
-        gcc "$1" -o "/tmp/$(basename "$1")"
-        chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
-        printf "\n${BCyan}End of excecution${White}\n"
-    else
-        getTextEditor "$1"
-    fi
-elif [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
+if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
     choise=getChoise
     if [[ choise ]]; then
@@ -249,7 +212,7 @@ elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]
     else
         printf "${BRed}Installation Canceled\n"
     fi
-else
+elif ! [ tryRunning $1 ]; then
     printf "${BRed}Sorry Unsupported file type.\n"
     printf "${BPurple}If you want to add support for this file type please file an issue on github.\n"
     printf "${BCyan}visit https://github.com/rohittp0/Shell-Run \n"
