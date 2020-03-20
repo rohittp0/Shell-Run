@@ -141,7 +141,7 @@ if [[ $(file --mime-type -b "$1") == "text/x-shellscript" ]]; then
     read -s -n 1 key
     if [[ $key == "" ]]; then
         printf "${BCyan}Starting excecution${White}\n"
-        sh "$1"
+        chmod +x $1 && sh "$1"
         printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
@@ -177,7 +177,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c++" ]]; then
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
         g++ "$1" -o "/tmp/$(basename "$1")"
-        "/tmp/$(basename "$1")"
+        chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
         printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
@@ -190,7 +190,7 @@ elif [[ $(file --mime-type -b "$1") == "text/x-c" ]]; then
     if [[ $key == "" ]]; then
         printf "${BCyan}Running script${White}\n"
         gcc "$1" -o "/tmp/$(basename "$1")"
-        "/tmp/$(basename "$1")"
+        chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"
         printf "\n${BCyan}End of excecution${White}\n"
     else
         gedit "$1"
@@ -201,7 +201,7 @@ elif [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
             printf "${BCyan}Starting application${White}\n"
-            "$1"
+            chmod +x "$1" && "$1"
             printf "\n${BCyan}End of excecution${White}\n"
             break
         elif [[ $key == "n" || key == "N" ]]; then
