@@ -112,8 +112,7 @@ function getTextEditor() {
     while [[ $key != '#' ]]; do
         for ((i = 0; i < ${#options[@]}; i++)); do
             if [[ $key == ${options[$i]} ]]; then
-                printf "Opening file in ${editors
-                [$(expr $i % ${#command[@]})]} \n${Color_Off}"
+                printf "Opening file... \n${Color_Off}"
                 "${command[$(expr $i % ${#command[@]})]}" "$1"
                 break 2
             fi

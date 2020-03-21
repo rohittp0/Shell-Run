@@ -1,2 +1,3 @@
 *.shadow
 *.date
+*local.version
