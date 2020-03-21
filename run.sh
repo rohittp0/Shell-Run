@@ -161,7 +161,7 @@ if ! [ -f "$pword" ]; then
     printf "${BRed}It seems like you don't have sudo password saved.\n"
     printf "${BPurple}Enter it now to save it !\n"
     printf "${BCyan}To modify it later change it in ${UCyan}$pword${BCyan} file.${White}\n"
-    read pass
+    read -s pass
     printf $pass | sudo -S touch "$root"
     while ! [ -f "/bin/a" ]; do
         read -s pass
