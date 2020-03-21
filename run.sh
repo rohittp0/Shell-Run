@@ -184,8 +184,9 @@ if [[ $(cat './.version') != $(cat /tmp/shell-runner.version) ]]; then
     getChoise
     if [ $choise == true ]; then
         printf "${BPurple}Updating...${White}\n"
-        git reset --hard origin/master
-        git pull -v
+        git reset HEAD --hard
+        git clean -f
+        git pull origin master
         printf "${BPurple}Press enter to continue.${White}\n"
         read -s -n 1 a
     fi
