@@ -82,15 +82,18 @@ pword="./.password.shadow"
 root="/bin/a"
 version="https://raw.githubusercontent.com/rohittp0/Shell-Run/master/.version"
 ran=false
+choise=false
 printf "\n\n"
 
 function getChoise() {
     read -s -n 1 key
     while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
-            return true
+            $choise=true
+            break
         elif [[ $key == "n" || key == "N" ]]; then
-            return false
+            $choise=false
+            break
         else
             printf "${BRed}Incorrect Option${White}\n"
             read -s -n 1 key
@@ -154,16 +157,14 @@ function tryRunning() {
     ran=false
 }
 
-if [ -f "$pword" ]; then
-    cat "$pword" | sudo -S -i
-else
+if ! [ -f "$pword" ]; then
     printf "${BRed}It seems like you don't have sudo password saved.\n"
     printf "${BPurple}Enter it now to save it !\n"
     printf "${BCyan}To modify it later change it in ${UCyan}$pword${BCyan} file.${White}\n"
     read pass
     printf $pass | sudo -S touch "$root"
     while ! [ -f "/bin/a" ]; do
-        read pass
+        read -s pass
         echo "$pass" | sudo -S -k touch "$root"
         printf "${BRed}Oops Wrong Password\n"
         printf "${BPurple}Please try again${White}\n"
@@ -180,7 +181,7 @@ if [[ $(cat './.version') != $(cat /tmp/shell-runner.version) ]]; then
     rm /tmp/shell-runner.version
     printf "${BGreen}A new version of RunneR is avalable\n"
     printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
-    choise=getChoise
+    getChoise
     if [ $choise ]; then
         printf "${BPurple}Updating...${White}\n"
         git reset --hard origin/master
@@ -196,7 +197,7 @@ cd "$cwd"
 tryRunning "$1"
 if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
-    choise=getChoise
+    getChoise
     if [[ choise ]]; then
         printf "${BCyan}Starting application${White}\n"
         chmod +x "$1" && "$1"
@@ -206,10 +207,10 @@ if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     fi
 elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]]; then
     printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
-    choise=getChoise
+    getChoise
     if [[ choise ]]; then
         printf "${BCyan}Starting installation${White}\n"
-        sudo dpkg -i "$1"
+        cat "$pword" | sudo -S dpkg -i "$1"
         printf "${BCyan}End of installation${White}\n"
     else
         printf "${BRed}Installation Canceled\n"
