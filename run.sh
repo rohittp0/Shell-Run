@@ -99,21 +99,22 @@ function getChoise() {
 }
 
 function getTextEditor() {
-    declare -a editors=("VSCode(c)" "Gedit(g)" "Nano(n)" "Vim(v)")
-    declare -a options=("c" "g" "n" "v" "C" "G" "N" "V")
-    declare -a command=("code" "gedit" "nano" "vi")
+    declare -a editors=("VSCode(c)" "Gedit(g)" "Nano(n)" "Vim(v)" "Cat(t)")
+    declare -a options=("c" "g" "n" "v" "t" "C" "G" "N" "V" "T")
+    declare -a command=("code" "gedit" "nano" "vi" "cat")
     printf "${BPurple}Choose which text editor you want to use ?\n"
     printf "Your options are : \n\n${BCyan}"
     for ((i = 0; i < ${#editors[@]}; i++)); do
         printf "${editors[$i]} "
     done
-    printf "${BPurple}\n\nEnter # to exit${White}\n\t"
+    printf "${BPurple}\n\nEnter # to exit${BWhite}\n\t"
     read -s -n 1 key
     while [[ $key != '#' ]]; do
         for ((i = 0; i < ${#options[@]}; i++)); do
             if [[ $key == ${options[$i]} ]]; then
-                printf "Opening file in ${editors[$i]}\n${Color_Off}"
-                "${command[$(expr $i % 4)]}" "$1"
+                printf "Opening file in ${editors
+                [$(expr $i % ${#command[@]})]} \n${Color_Off}"
+                "${command[$(expr $i % ${#command[@]})]}" "$1"
                 break 2
             fi
         done
