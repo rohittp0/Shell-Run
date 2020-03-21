@@ -81,6 +81,7 @@ cd "$(dirname "$(readlink -fm "$0")")"
 pword="./.password.shadow"
 root="/bin/a"
 last="$(cat ./LAST_RUN.date)"
+ran=false
 printf "\n\n"
 
 function getChoise() {
@@ -121,11 +122,19 @@ function getTextEditor() {
     done
 }
 
-function tryRunning() {
-    c_cpp=$(""$1" -o "/tmp/$(basename "$1")" && chmod +x "/tmp/$(basename "$1")" && "/tmp/$(basename "$1")"")
-    declare -a files=("text/x-shellscript" "text/x-c" "application/java-archive" "text/x-python" "text/x-c++")
-    declare -a commands=("chmod +x $1 && sh $1" "gcc $c_cpp" "java -jar $1" "python $1" "g++ $c_cpp")
+function runFile() {
+    case $2 in
+    0) chmod +x "$1" && bash "$1" ;;
+    1) gcc "$1" -o /tmp/$(basename "$1") && chmod +x /tmp/$(basename "$1") && /tmp/$(basename "$1") ;;
+    2) java -jar "$1" ;;
+    3) python "$1" ;;
+    4) g++ "$1" -o /tmp/$(basename "$1") && chmod +x /tmp/$(basename "$1") && /tmp/$(basename "$1") ;;
+    *) printf "${BRed}Oops somting went wrong." ;;
+    esac
+}
 
+function tryRunning() {
+    declare -a files=("text/x-shellscript" "text/x-c" "application/java-archive" "text/x-python" "text/x-c++")
     for ((i = 0; i < ${#files[@]}; i++)); do
         if [[ $(file --mime-type -b "$1") == ${files[$i]} ]]; then
             printf "${BYellow}Do you want to run this file ?\n"
@@ -133,15 +142,16 @@ function tryRunning() {
             read -s -n 1 key
             if [[ $key == "" ]]; then
                 printf "${BCyan}Starting excecution${White}\n"
-                ${commands[$i]}
+                runFile $1 $i
                 printf "\n${BCyan}End of excecution${White}\n"
-                return true
             else
                 getTextEditor "$1"
             fi
+            ran=true
+            return 0
         fi
     done
-    return false
+    ran=false
 }
 
 if [ -f "$pword" ]; then
@@ -191,7 +201,7 @@ if [[ $(date '+%Y-%m-%d') != $last ]]; then
 fi
 
 cd "$cwd"
-
+tryRunning "$1"
 if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
     choise=getChoise
@@ -212,7 +222,7 @@ elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]
     else
         printf "${BRed}Installation Canceled\n"
     fi
-elif ! [ tryRunning $1 ]; then
+elif [ $ran == false ]; then
     printf "${BRed}Sorry Unsupported file type.\n"
     printf "${BPurple}If you want to add support for this file type please file an issue on github.\n"
     printf "${BCyan}visit https://github.com/rohittp0/Shell-Run \n"
