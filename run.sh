@@ -89,10 +89,10 @@ function getChoise() {
     read -s -n 1 key
     while [[ true ]]; do
         if [[ $key == "y" || $Key == "Y" ]]; then
-            $choise=true
+            choise=true
             break
         elif [[ $key == "n" || key == "N" ]]; then
-            $choise=false
+            choise=false
             break
         else
             printf "${BRed}Incorrect Option${White}\n"
