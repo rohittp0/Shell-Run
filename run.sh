@@ -182,7 +182,7 @@ if [[ $(cat './.version') != $(cat /tmp/shell-runner.version) ]]; then
     printf "${BGreen}A new version of RunneR is avalable\n"
     printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
     getChoise
-    if [ $choise ]; then
+    if [ $choise == true ]; then
         printf "${BPurple}Updating...${White}\n"
         git reset --hard origin/master
         git pull -v
@@ -198,7 +198,7 @@ tryRunning "$1"
 if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
     getChoise
-    if [[ choise ]]; then
+    if [[ $choise == true ]]; then
         printf "${BCyan}Starting application${White}\n"
         chmod +x "$1" && "$1"
         printf "\n${BCyan}End of excecution${White}\n"
@@ -208,7 +208,7 @@ if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
 elif [[ $(file --mime-type -b "$1") == "application/vnd.debian.binary-package" ]]; then
     printf "${BYellow}Are you sure you want to install this package ? ${Choise}\n"
     getChoise
-    if [[ choise ]]; then
+    if [[ $choise == true ]]; then
         printf "${BCyan}Starting installation${White}\n"
         cat "$pword" | sudo -S dpkg -i "$1"
         printf "${BCyan}End of installation${White}\n"
