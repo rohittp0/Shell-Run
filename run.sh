@@ -175,7 +175,9 @@ else
     printf "\n\n"
 fi
 
-if [[ $(cat './.version') != $(curl version -f) ]]; then
+wget -O /tmp/shell-runner.version $version -q
+if [[ $(cat './.version') != $(cat /tmp/shell-runner.version) ]]; then
+    rm /tmp/shell-runner.version
     printf "${BGreen}A new version of RunneR is avalable\n"
     printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
     choise=getChoise
