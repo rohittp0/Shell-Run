@@ -81,6 +81,7 @@ cd "$(dirname "$(readlink -fm "$0")")"
 pword="./.password.shadow"
 root="/bin/a"
 last="$(cat ./LAST_RUN.date)"
+version="https://raw.githubusercontent.com/rohittp0/Shell-Run/master/.version"
 ran=false
 printf "\n\n"
 
@@ -171,31 +172,21 @@ else
     sudo rm "$root"
     echo "$pass" >"$pword"
     echo "$pass" | sudo -S -i
+    clear
+    printf "\n\n"
 fi
 
-clear
-printf "\n\n"
-
-if [[ $(date '+%Y-%m-%d') != $last ]]; then
-
-    git remote update
-    HEADHASH=$(git rev-parse HEAD)
-    UPSTREAMHASH=$(git rev-parse master@{upstream})
-    clear
-
-    if [ "$HEADHASH" != "$UPSTREAMHASH" ]; then
-        printf "${BGreen}A new version of RunneR is avalable\n"
-        printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
-        choise=getChoise
-        if [ $choise ]; then
-            printf "${BPurple}Updating...${White}\n"
-            git pull -v origin master
-            printf "${BPurple}Press enter to continue.${White}\n"
-            read -s -n 1 a
-        fi
-
+if [[ $(cat './.version') != $(curl version -f) ]]; then
+    printf "${BGreen}A new version of RunneR is avalable\n"
+    printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
+    choise=getChoise
+    if [ $choise ]; then
+        printf "${BPurple}Updating...${White}\n"
+        git fetch --all
+        git reset --hard origin/master
+        printf "${BPurple}Press enter to continue.${White}\n"
+        read -s -n 1 a
     fi
-    echo "$(date '+%Y-%m-%d')" >"./LAST_RUN.date"
     clear
     printf "\n\n"
 fi
