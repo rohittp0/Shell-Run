@@ -176,11 +176,9 @@ if ! [ -f "$pword" ]; then
     printf "\n\n"
 fi
 
-if [ -f /tmp/shell-runner.version ]; then
-    rm /tmp/shell-runner.version
-fi
-wget -O /tmp/shell-runner.version $version -q
-if [[ $(cat './.version') != $(cat /tmp/shell-runner.version) ]]; then
+ver=$(curl $version)
+clear
+if [[ $(cat './.version') != $ver ]]; then
     printf "${BGreen}A new version of RunneR is avalable\n"
     printf "${BYellow}Do you want to upgrade ? ${Choise}\n"
     getChoise
