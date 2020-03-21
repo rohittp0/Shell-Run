@@ -80,7 +80,6 @@ cd "$(dirname "$(readlink -fm "$0")")"
 
 pword="./.password.shadow"
 root="/bin/a"
-last="$(cat ./LAST_RUN.date)"
 version="https://raw.githubusercontent.com/rohittp0/Shell-Run/master/.version"
 ran=false
 printf "\n\n"
