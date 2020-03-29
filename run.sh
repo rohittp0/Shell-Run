@@ -145,7 +145,7 @@ function tryRunning() {
             read -s -n 1 key
             if [[ $key == "" ]]; then
                 printf "${BCyan}Starting excecution${White}\n"
-                runFile $1 $i
+                time runFile $1 $i
                 printf "\n${BCyan}End of excecution${White}\n"
             else
                 getTextEditor "$1"
@@ -195,6 +195,11 @@ if [[ $(cat './.version') != $ver ]]; then
 fi
 
 cd "$cwd"
+if ! [ -f "$1" ]; then
+    printf "${BYellow}Which file do you want to run ?\n"
+    read file
+    $1="$file"
+fi        
 tryRunning "$1"
 if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     printf "${BYellow}Do you want to run this application ? ${Choise}\n"
@@ -202,6 +207,16 @@ if [[ $(file --mime-type -b "$1") == "application/x-sharedlib" ]]; then
     if [[ $choise == true ]]; then
         printf "${BCyan}Starting application${White}\n"
         chmod +x "$1" && "$1"
+        printf "\n${BCyan}End of excecution${White}\n"
+    else
+        printf "${BRed}Excecution Canceled\n"
+    fi
+elif [[ $(file --mime-type -b "$1") == "application/x-dosexec" ]]; then
+    printf "${BYellow}Do you want to run this application ? ${Choise}\n"
+    getChoise
+    if [[ $choise == true ]]; then
+        printf "${BCyan}Starting application${White}\n"
+        chmod +x "$1" && wine "$1"
         printf "\n${BCyan}End of excecution${White}\n"
     else
         printf "${BRed}Excecution Canceled\n"
